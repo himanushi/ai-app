@@ -12,7 +12,8 @@
 <h1>Welcome to SvelteKit</h1>
 <h1>Welcome to SvelteKit</h1>
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-<button on:click={() => CapCoreML.echo({ value: 'test' })}>echo</button>
+<button on:click={() => CapCoreML.download({ value: 'test' })}>download</button>
+<button on:click={() => CapCoreML.echo({ value: 'test' })}>download</button>
 <button on:click={() => CapCoreML.load({ value: 'test' })}>Load</button>
 <button
 	on:click={() =>
@@ -23,6 +24,7 @@
 			encoding: Encoding.UTF8
 		})}>Image Download</button
 >
+
 <button
 	on:click={async () =>
 		(dir = await Filesystem.readdir({
