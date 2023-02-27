@@ -1,10 +1,6 @@
 <script lang="ts">
-	import { CapCoreML } from 'capacitor-plugin-coreml';
-	import { Filesystem, Directory, Encoding, type ReaddirResult } from '@capacitor/filesystem';
-
-	let dir: ReaddirResult;
-
-	$: console.log(dir);
+	import { StableDiffusion } from 'capacitor-plugin-stable-diffusion';
+	import { Filesystem, Directory, type ReaddirResult } from '@capacitor/filesystem';
 </script>
 
 <h1>Welcome to SvelteKit</h1>
@@ -12,28 +8,42 @@
 <h1>Welcome to SvelteKit</h1>
 <h1>Welcome to SvelteKit</h1>
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-<button on:click={() => CapCoreML.download({ value: 'test' })}>download</button>
-<button on:click={() => CapCoreML.echo({ value: 'test' })}>download</button>
-<button on:click={() => CapCoreML.load({ value: 'test' })}>Load</button>
+<button on:click={() => StableDiffusion.echo({ value: 'test' })}>echo</button>
 <button
 	on:click={() =>
-		Filesystem.writeFile({
-			path: 'text.txt',
-			data: 'This is a test',
-			directory: Directory.Documents,
-			encoding: Encoding.UTF8
-		})}>Image Download</button
+		StableDiffusion.download({
+			url: 'https://huggingface.co/coreml/coreml-stable-diffusion-2-1-base/resolve/main/split_einsum/stable-diffusion-v2.1-base_no-i2i_split-einsum.zip',
+			modelsDirName: 'models'
+		})}>download</button
 >
-
+<button
+	on:click={() =>
+		StableDiffusion.unzip({
+			url: 'https://huggingface.co/coreml/coreml-stable-diffusion-2-1-base/resolve/main/split_einsum/stable-diffusion-v2.1-base_no-i2i_split-einsum.zip',
+			modelsDirName: 'models'
+		})}>unzip</button
+>
+<button
+	on:click={() =>
+		StableDiffusion.generateTextToImage({
+			modelPath: 'models/stable-diffusion-v2.1-base_no-i2i_split-einsum',
+			prompt: 'a photo of car'
+		})}>generateTextToImage</button
+>
 <button
 	on:click={async () =>
-		(dir = await Filesystem.readdir({
+		await Filesystem.readdir({
 			path: '/',
 			directory: Directory.Documents
-		}))}>Get Files</button
+		})}>Get Files</button
 >
-{dir}
-
+<button
+	on:click={async () =>
+		await Filesystem.readdir({
+			path: '/models',
+			directory: Directory.Documents
+		})}>Get Models Files</button
+>
 <button
 	on:click={async () =>
 		await Filesystem.mkdir({
