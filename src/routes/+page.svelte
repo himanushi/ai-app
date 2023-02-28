@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
+	import { onMount } from 'svelte';
+
 	// import { StableDiffusion } from 'capacitor-plugin-stable-diffusion';
 	// import { Filesystem, Directory } from '@capacitor/filesystem';
 	// import { onMount } from 'svelte';
@@ -32,6 +36,9 @@
 	// 		gError = data.error;
 	// 	});
 	// });
+	onMount(() => {
+		goto('/generate');
+	});
 </script>
 
 <!-- <ion-item href="/file">
