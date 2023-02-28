@@ -3,6 +3,8 @@
 	// import { Filesystem, Directory } from '@capacitor/filesystem';
 	// import { onMount } from 'svelte';
 
+	import Page from './file/[...path]/+page.svelte';
+
 	// let dProgress = 0;
 	// let dStatus = '';
 	// let dError: string | undefined = '';
@@ -32,9 +34,10 @@
 	// });
 </script>
 
-<ion-item href="/file">
+<!-- <ion-item href="/file">
 	<ion-label> ファイルマネージャ </ion-label>
-</ion-item>
+</ion-item> -->
+
 <!-- <h1>Welcome to SvelteKit</h1>
 <h1>Welcome to SvelteKit</h1>
 <h1>Welcome to SvelteKit</h1>
