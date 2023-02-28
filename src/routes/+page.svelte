@@ -1,41 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
 	import { onMount } from 'svelte';
-
-	// import { StableDiffusion } from 'capacitor-plugin-stable-diffusion';
-	// import { Filesystem, Directory } from '@capacitor/filesystem';
-	// import { onMount } from 'svelte';
-
-	import Page from './file/[...path]/+page.svelte';
-
-	// let dProgress = 0;
-	// let dStatus = '';
-	// let dError: string | undefined = '';
-	// let zStatus = '';
-	// let gProgress = 0;
-	// let gStatus = '';
-	// let gError: string | undefined = '';
-
-	// onMount(() => {
-	// 	StableDiffusion.addListener('downloadProgress', (data) => {
-	// 		dProgress = data.progress;
-	// 	});
-	// 	StableDiffusion.addListener('downloadDidComplete', (data) => {
-	// 		dStatus = data.state;
-	// 		dError = data.error;
-	// 	});
-	// 	StableDiffusion.addListener('unzipDidComplete', (data) => {
-	// 		zStatus = data.state;
-	// 	});
-	// 	StableDiffusion.addListener('generateProgress', (data) => {
-	// 		gProgress = data.progress;
-	// 	});
-	// 	StableDiffusion.addListener('generateDidComplete', (data) => {
-	// 		gStatus = data.state;
-	// 		gError = data.error;
-	// 	});
-	// });
 	onMount(() => {
 		goto('/generate');
 	});
