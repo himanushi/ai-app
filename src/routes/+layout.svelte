@@ -17,7 +17,7 @@
 			<ion-title> AI画像生成 </ion-title>
 		</ion-toolbar>
 	</ion-header>
-	<ion-content>
+	<ion-content force-overscroll={false}>
 		<slot />
 	</ion-content>
 </ion-app>

@@ -2,16 +2,19 @@
 	import type { ReaddirResult } from '@capacitor/filesystem';
 	import type { PageData } from './$types';
 	import { Filesystem, Directory } from '@capacitor/filesystem';
+	import Icon from '~/components/icon.svelte';
 
 	export let data: PageData;
 
 	$: path = data.path;
+	$: prevHref = ['/file', ...path.split('/')]
+		.filter((pt) => pt !== '')
+		.slice(0, -1)
+		.join('/');
 	const href = (fileName: string) => ['/file', path, fileName].filter((pt) => pt !== '').join('/');
-	const prevHref = ['/file', path].filter((pt) => pt !== '').join('/');
 	let dir: ReaddirResult;
 
 	$: (async () => {
-		console.log('load file');
 		dir = await Filesystem.readdir({
 			path,
 			directory: Directory.Documents
@@ -21,11 +24,23 @@
 
 {#if dir}
 	{#each dir.files as file}
-		<ion-item href={href(file.name)}>
+		{@const isDirectory = file.type === 'directory'}
+		<ion-item href={isDirectory ? href(file.name) : undefined}>
+			{#if isDirectory}
+				<Icon fill name="folder" color="yellow" />
+			{:else}
+				<Icon fill name="description" color="blue" />
+			{/if}
 			{file.name}
 		</ion-item>
 	{/each}
 {/if}
 
-<ion-item href={prevHref}> .. </ion-item>
-<ion-item href={'/'}> ホーム </ion-item>
+<ion-item href={prevHref} detail={false}>
+	<Icon fill name="chevron_left" color="gray" />
+	1つ戻る
+</ion-item>
+<ion-item href={'/'} detail={false}>
+	<Icon fill name="home" color="light-green" />
+	ホームへ戻る
+</ion-item>
