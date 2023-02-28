@@ -3,6 +3,11 @@
 	import { Filesystem, Directory } from '@capacitor/filesystem';
 	import { onDestroy, onMount } from 'svelte';
 	import type { PluginListenerHandle } from '@capacitor/core';
+	import { _ } from 'svelte-i18n';
+
+	let prompt = '';
+	let base64Data: string | undefined;
+	$: image = 'data:image/jpeg;base64,' + base64Data;
 
 	let dProgress = 0;
 	let dStatus = '';
@@ -11,6 +16,12 @@
 	let gProgress = 0;
 	let gStatus = '';
 	let gError: string | undefined = '';
+
+	const generate = async () =>
+		StableDiffusion.generateTextToImage({
+			modelPath: 'models/stable-diffusion-v2.1-base_no-i2i_split-einsum',
+			prompt
+		});
 
 	let handlers: PluginListenerHandle[] = [];
 	onMount(async () => {
@@ -31,6 +42,7 @@
 			await StableDiffusion.addListener('generateDidComplete', (data) => {
 				gStatus = data.state;
 				gError = data.error;
+				base64Data = data.image;
 			})
 		];
 	});
@@ -41,148 +53,27 @@
 </script>
 
 <ion-list>
-	<ion-list-header>
-		<ion-label>Video Games</ion-label>
-	</ion-list-header>
-	<ion-item>
-		<ion-label>Pokémon Yellow</ion-label>
+	<ion-item lines="none">
+		<ion-label>{$_('page.generate.prompt')}</ion-label>
 	</ion-item>
 	<ion-item>
-		<ion-label>Mega Man X</ion-label>
+		<ion-textarea auto-grow={true} value={prompt} />
+	</ion-item>
+	<ion-item lines="none">
+		<ion-label>{$_('page.generate.negativePrompt')}</ion-label>
 	</ion-item>
 	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
+		<ion-textarea auto-grow={true} />
 	</ion-item>
 	<ion-item>
-		<ion-label>Pac-Man</ion-label>
+		<ion-button size={'large'} on:click={generate}>
+			<ion-label>画像生成</ion-label>
+		</ion-button>
+		{gProgress}
 	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-list-header>
-		<ion-label>Video Games</ion-label>
-	</ion-list-header>
-	<ion-item>
-		<ion-label>Pokémon Yellow</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Mega Man X</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-list-header>
-		<ion-label>Video Games</ion-label>
-	</ion-list-header>
-	<ion-item>
-		<ion-label>Pokémon Yellow</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Mega Man X</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-list-header>
-		<ion-label>Video Games</ion-label>
-	</ion-list-header>
-	<ion-item>
-		<ion-label>Pokémon Yellow</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Mega Man X</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-list-header>
-		<ion-label>Video Games</ion-label>
-	</ion-list-header>
-	<ion-item>
-		<ion-label>Pokémon Yellow</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Mega Man X</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-list-header>
-		<ion-label>Video Games</ion-label>
-	</ion-list-header>
-	<ion-item>
-		<ion-label>Pokémon Yellow</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Mega Man X</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>The Legend of Zelda</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Pac-Man</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-label>Super Mario World</ion-label>
-	</ion-item>
+	{#if base64Data}
+		<ion-item>
+			<ion-img src={image} />
+		</ion-item>
+	{/if}
 </ion-list>
