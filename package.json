@@ -35,6 +35,7 @@
 		"@capacitor/core": "^4.7.0",
 		"@capacitor/filesystem": "^4.1.4",
 		"@capacitor/ios": "^4.7.0",
+		"@ionic/core": "^7.0.0-beta.5",
 		"capacitor-plugin-stable-diffusion": "^0.0.5"
 	}
 }
