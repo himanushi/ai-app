@@ -5,8 +5,17 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import Icon from '~/components/icon.svelte';
+	import { Filesystem, Directory } from '@capacitor/filesystem';
 
 	onMount(() => {
+		Filesystem.mkdir({
+			path: 'models',
+			directory: Directory.Documents
+		});
+		Filesystem.mkdir({
+			path: 'images',
+			directory: Directory.Documents
+		});
 		initialize({
 			animated: true,
 			mode: 'ios'
