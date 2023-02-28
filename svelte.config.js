@@ -11,7 +11,16 @@ const config = {
 			// SPA mode
 			fallback: 'index.html'
 		}),
-		prerender: { entries: [] }
+		prerender: { entries: [] },
+		alias: {
+			'~': 'src'
+		}
+	},
+	onwarn: (warning, handler) => {
+		if (warning.code.startsWith('a11y-')) {
+			return;
+		}
+		handler(warning);
 	}
 };
 
