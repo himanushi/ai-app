@@ -16,11 +16,11 @@
 
 <ion-app>
 	<ion-header><ion-toolbar /></ion-header>
-	<ion-content force-overscroll={false}>
+	<ion-content>
 		<ion-tabs>
-			<ion-tab tab="generate"><slot /></ion-tab>
-			<ion-tab tab="images"><slot /> </ion-tab>
-			<ion-tab tab="file"><slot /></ion-tab>
+			<ion-tab tab="generate"><ion-content><slot /></ion-content></ion-tab>
+			<ion-tab tab="images"><ion-content><slot /></ion-content></ion-tab>
+			<ion-tab tab="file"><ion-content><slot /></ion-content></ion-tab>
 			<ion-tab-bar slot="bottom">
 				<ion-tab-button tab="generate" on:click={() => goto('/generate')}>
 					<Icon name="brush" size="l" fill />
