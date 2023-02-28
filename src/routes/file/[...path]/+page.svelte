@@ -22,25 +22,22 @@
 	})();
 </script>
 
-{#if dir}
-	{#each dir.files as file}
-		{@const isDirectory = file.type === 'directory'}
-		<ion-item href={isDirectory ? href(file.name) : undefined}>
-			{#if isDirectory}
-				<Icon fill name="folder" color="yellow" />
-			{:else}
-				<Icon fill name="description" color="blue" />
-			{/if}
-			{file.name}
-		</ion-item>
-	{/each}
-{/if}
-
-<ion-item href={prevHref} detail={false}>
-	<Icon fill name="chevron_left" color="gray" />
-	1つ戻る
-</ion-item>
-<ion-item href={'/'} detail={false}>
-	<Icon fill name="home" color="light-green" />
-	ホームへ戻る
-</ion-item>
+<ion-item-list>
+	{#if dir}
+		{#each dir.files as file}
+			{@const isDirectory = file.type === 'directory'}
+			<ion-item href={isDirectory ? href(file.name) : undefined}>
+				{#if isDirectory}
+					<Icon fill name="folder" color="yellow" />
+				{:else}
+					<Icon fill name="description" color="blue" />
+				{/if}
+				{file.name}
+			</ion-item>
+		{/each}
+	{/if}
+	<ion-item href={prevHref} detail={false}>
+		<Icon fill name="chevron_left" color="gray" />
+		1つ戻る
+	</ion-item>
+</ion-item-list>
