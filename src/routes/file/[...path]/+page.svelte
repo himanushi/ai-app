@@ -22,7 +22,7 @@
 	})();
 </script>
 
-<ion-item-list>
+<ion-item-group>
 	{#if dir}
 		{#each dir.files as file}
 			{@const isDirectory = file.type === 'directory'}
@@ -40,4 +40,4 @@
 		<Icon fill name="chevron_left" color="gray" />
 		1つ戻る
 	</ion-item>
-</ion-item-list>
+</ion-item-group>
