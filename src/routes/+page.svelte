@@ -1,38 +1,41 @@
 <script lang="ts">
-	import { StableDiffusion } from 'capacitor-plugin-stable-diffusion';
-	import { Filesystem, Directory } from '@capacitor/filesystem';
-	import { onMount } from 'svelte';
+	// import { StableDiffusion } from 'capacitor-plugin-stable-diffusion';
+	// import { Filesystem, Directory } from '@capacitor/filesystem';
+	// import { onMount } from 'svelte';
 
-	let dProgress = 0;
-	let dStatus = '';
-	let dError: string | undefined = '';
-	let zStatus = '';
-	let gProgress = 0;
-	let gStatus = '';
-	let gError: string | undefined = '';
+	// let dProgress = 0;
+	// let dStatus = '';
+	// let dError: string | undefined = '';
+	// let zStatus = '';
+	// let gProgress = 0;
+	// let gStatus = '';
+	// let gError: string | undefined = '';
 
-	onMount(() => {
-		StableDiffusion.addListener('downloadProgress', (data) => {
-			dProgress = data.progress;
-		});
-		StableDiffusion.addListener('downloadDidComplete', (data) => {
-			dStatus = data.state;
-			dError = data.error;
-		});
-		StableDiffusion.addListener('unzipDidComplete', (data) => {
-			zStatus = data.state;
-		});
-		StableDiffusion.addListener('generateProgress', (data) => {
-			gProgress = data.progress;
-		});
-		StableDiffusion.addListener('generateDidComplete', (data) => {
-			gStatus = data.state;
-			gError = data.error;
-		});
-	});
+	// onMount(() => {
+	// 	StableDiffusion.addListener('downloadProgress', (data) => {
+	// 		dProgress = data.progress;
+	// 	});
+	// 	StableDiffusion.addListener('downloadDidComplete', (data) => {
+	// 		dStatus = data.state;
+	// 		dError = data.error;
+	// 	});
+	// 	StableDiffusion.addListener('unzipDidComplete', (data) => {
+	// 		zStatus = data.state;
+	// 	});
+	// 	StableDiffusion.addListener('generateProgress', (data) => {
+	// 		gProgress = data.progress;
+	// 	});
+	// 	StableDiffusion.addListener('generateDidComplete', (data) => {
+	// 		gStatus = data.state;
+	// 		gError = data.error;
+	// 	});
+	// });
 </script>
 
-<h1>Welcome to SvelteKit</h1>
+<ion-item href="/file">
+	<ion-label> ファイルマネージャ </ion-label>
+</ion-item>
+<!-- <h1>Welcome to SvelteKit</h1>
 <h1>Welcome to SvelteKit</h1>
 <h1>Welcome to SvelteKit</h1>
 <h1>Welcome to SvelteKit</h1>
@@ -86,4 +89,4 @@ gError: {gError}<br /><br />
 			path: 'models',
 			directory: Directory.Documents
 		})}>Create Models Dir</button
->
+> -->
