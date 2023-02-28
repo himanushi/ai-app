@@ -3,6 +3,7 @@
 	import type { PageData } from './$types';
 	import { Filesystem, Directory } from '@capacitor/filesystem';
 	import Icon from '~/components/icon.svelte';
+	import { Capacitor } from '@capacitor/core';
 
 	export let data: PageData;
 
@@ -25,14 +26,21 @@
 <ion-item-group>
 	{#if dir}
 		{#each dir.files as file}
+			{@const isImage = file.name.endsWith('.png')}
 			{@const isDirectory = file.type === 'directory'}
 			<ion-item href={isDirectory ? href(file.name) : undefined}>
-				{#if isDirectory}
+				{#if isImage}
+					<ion-thumbnail>
+						<ion-img src={Capacitor.convertFileSrc(file.uri)} />
+					</ion-thumbnail>
+				{:else if isDirectory}
 					<Icon fill name="folder" color="yellow" />
 				{:else}
 					<Icon fill name="description" color="blue" />
 				{/if}
-				{file.name}
+				<ion-label>
+					{file.name}
+				</ion-label>
 			</ion-item>
 		{/each}
 	{/if}
