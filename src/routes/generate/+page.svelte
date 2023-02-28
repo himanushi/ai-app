@@ -3,9 +3,8 @@
 	import { Filesystem, Directory } from '@capacitor/filesystem';
 	import { onDestroy, onMount } from 'svelte';
 	import type { PluginListenerHandle } from '@capacitor/core';
-	import { _ } from 'svelte-i18n';
 
-	let prompt = '';
+	let prompt: string | null | undefined = '';
 	let base64Data: string | undefined;
 	$: image = 'data:image/jpeg;base64,' + base64Data;
 
@@ -17,11 +16,13 @@
 	let gStatus = '';
 	let gError: string | undefined = '';
 
-	const generate = async () =>
+	const generate = async () => {
+		if (!prompt) return;
 		StableDiffusion.generateTextToImage({
 			modelPath: 'models/stable-diffusion-v2.1-base_no-i2i_split-einsum',
 			prompt
 		});
+	};
 
 	let handlers: PluginListenerHandle[] = [];
 	onMount(async () => {
@@ -54,13 +55,17 @@
 
 <ion-list>
 	<ion-item lines="none">
-		<ion-label>{$_('page.generate.prompt')}</ion-label>
+		<ion-label>Prompt</ion-label>
 	</ion-item>
 	<ion-item>
-		<ion-textarea auto-grow={true} value={prompt} />
+		<ion-textarea
+			auto-grow={true}
+			value={prompt}
+			on:ionChange={(ion) => (prompt = ion.detail.value)}
+		/>
 	</ion-item>
 	<ion-item lines="none">
-		<ion-label>{$_('page.generate.negativePrompt')}</ion-label>
+		<ion-label>Negative Prompt</ion-label>
 	</ion-item>
 	<ion-item>
 		<ion-textarea auto-grow={true} />
