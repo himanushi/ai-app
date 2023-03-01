@@ -7,18 +7,28 @@
 	import Icon from '~/components/icon.svelte';
 	import { Filesystem, Directory } from '@capacitor/filesystem';
 
-	onMount(() => {
-		Filesystem.mkdir({
-			path: 'models',
-			directory: Directory.Documents
-		});
-		Filesystem.mkdir({
-			path: 'images',
-			directory: Directory.Documents
-		});
+	onMount(async () => {
 		initialize({
 			animated: true,
 			mode: 'ios'
+		});
+
+		Filesystem.readdir({
+			directory: Directory.Documents,
+			path: ''
+		}).then((dir) => {
+			if (!dir.files.find((file) => file.name === 'models')) {
+				Filesystem.mkdir({
+					directory: Directory.Documents,
+					path: 'models'
+				});
+			}
+			if (!dir.files.find((file) => file.name === 'images')) {
+				Filesystem.mkdir({
+					directory: Directory.Documents,
+					path: 'images'
+				});
+			}
 		});
 	});
 </script>
