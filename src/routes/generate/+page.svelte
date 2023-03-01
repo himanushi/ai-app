@@ -3,8 +3,10 @@
 	import { Filesystem, Directory } from '@capacitor/filesystem';
 	import { onDestroy, onMount } from 'svelte';
 	import type { PluginListenerHandle } from '@capacitor/core';
+	import { v4 as uuid } from 'uuid';
 
-	let prompt: string | null | undefined = '';
+	let prompt: string | null | undefined;
+	let seed = -1;
 	let base64Data: string | undefined;
 	// $: image = 'data:image/jpeg;base64,' + base64Data;
 
@@ -36,7 +38,9 @@
 
 		StableDiffusion.generateTextToImage({
 			modelPath: 'models/stable-diffusion-v2.1-base_split-einsum_compiled',
-			prompt
+			prompt,
+			savePath: `images/${uuid()}.png`,
+			seed
 		});
 	};
 
@@ -82,10 +86,18 @@
 		/>
 	</ion-item>
 	<ion-item lines="none">
-		<ion-label>Negative Prompt</ion-label>
+		<ion-label>Seed</ion-label>
 	</ion-item>
 	<ion-item>
-		<ion-textarea auto-grow={true} />
+		<ion-input
+			value={seed}
+			type={'number'}
+			on:ionChange={(ion) => {
+				if (typeof ion.detail.value === 'number') {
+					seed = ion.detail.value;
+				}
+			}}
+		/>
 	</ion-item>
 	<ion-item>
 		<ion-button size={'large'} on:click={generate}>
