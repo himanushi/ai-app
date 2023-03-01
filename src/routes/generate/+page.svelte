@@ -1,115 +1,86 @@
 <script lang="ts">
 	import { StableDiffusion } from 'capacitor-plugin-stable-diffusion';
-	import { Filesystem, Directory } from '@capacitor/filesystem';
-	import { onDestroy, onMount } from 'svelte';
-	import type { PluginListenerHandle } from '@capacitor/core';
 	import { v4 as uuid } from 'uuid';
+	import { Capacitor } from '@capacitor/core';
+	import Model from './model.svelte';
+	import type { Model as ModelType } from './models';
+	import { loadingController } from '@ionic/core';
+	import Prompt from './prompt.svelte';
 
 	let prompt: string | null | undefined;
-	let seed = -1;
-	let base64Data: string | undefined;
-	// $: image = 'data:image/jpeg;base64,' + base64Data;
+	let seed = 1;
+	let filePath: string | undefined;
+	let model: ModelType | undefined;
 
-	let dProgress = 0;
-	let dStatus = '';
-	let dError: string | undefined = '';
-	let zStatus = '';
-	let gProgress = 0;
-	let gStatus = '';
-	let gError: string | undefined = '';
-
+	let progress = 0;
+	let generating = false;
 	const generate = async () => {
-		if (!prompt) return;
+		if (!prompt || !model) return;
+
+		generating = true;
+		const loading = await loadingController.create({
+			message: 'Generating...'
+		});
+		loading.present();
 
 		const progressHandler = await StableDiffusion.addListener('generateProgress', (data) => {
-			console.log('progressHandler');
-			gProgress = data.progress;
-			console.log('progressHandler2');
+			progress = data.progress;
 		});
 
 		const compHandler = await StableDiffusion.addListener('generateDidComplete', (data) => {
-			console.log('compHandler');
 			compHandler.remove();
 			progressHandler.remove();
-			gStatus = data.state;
-			gError = data.error;
-			console.log('compHandler2');
+			loading.dismiss();
+			generating = false;
+			if (data.filePath) {
+				filePath = data.filePath;
+			}
 		});
 
 		StableDiffusion.generateTextToImage({
-			modelPath: 'models/stable-diffusion-v2.1-base_split-einsum_compiled',
+			modelPath: `models/${model.fileName}`,
 			prompt,
 			savePath: `images/${uuid()}.png`,
 			seed
 		});
 	};
 
-	let handlers: PluginListenerHandle[] = [];
-	onMount(async () => {
-		handlers = [
-			// await StableDiffusion.addListener('downloadProgress', (data) => {
-			// 	dProgress = data.progress;
-			// }),
-			// await StableDiffusion.addListener('downloadDidComplete', (data) => {
-			// 	dStatus = data.state;
-			// 	dError = data.error;
-			// }),
-			// await StableDiffusion.addListener('unzipDidComplete', (data) => {
-			// 	zStatus = data.state;
-			// }),
-			// await StableDiffusion.addListener('generateProgress', (data) => {
-			// 	gProgress = data.progress;
-			// }),
-			// await StableDiffusion.addListener('generateDidComplete', (data) => {
-			// 	console.log('comppppppppppp');
-			// 	gStatus = data.state;
-			// 	gError = data.error;
-			// 	base64Data = data.image;
-			// })
-		];
-	});
-
-	onDestroy(() => {
-		handlers.map((handler) => handler.remove());
-	});
+	$: console.log(progress);
 </script>
 
 <ion-list>
-	<ion-item lines="none">
-		<ion-label>Prompt</ion-label>
-	</ion-item>
-	<ion-item>
-		<ion-textarea
-			auto-grow={true}
-			value={prompt}
-			on:ionChange={(ion) => (prompt = ion.detail.value)}
-		/>
-	</ion-item>
-	<ion-item lines="none">
-		<ion-label>Seed</ion-label>
-	</ion-item>
+	<Model bind:model />
+	<Prompt bind:prompt />
+	<ion-item-divider>
+		<ion-label> Seed </ion-label>
+	</ion-item-divider>
 	<ion-item>
 		<ion-input
 			value={seed}
 			type={'number'}
 			on:ionChange={(ion) => {
-				if (typeof ion.detail.value === 'number') {
-					seed = ion.detail.value;
+				if (typeof ion.detail.value === 'string') {
+					seed = parseInt(ion.detail.value, 10);
 				}
 			}}
 		/>
 	</ion-item>
 	<ion-item>
-		<ion-button size={'large'} on:click={generate}>
-			<ion-label>画像生成</ion-label>
-		</ion-button>
-		{gProgress}
+		{#if generating}
+			{#if progress}
+				<ion-progress-bar color="blue" value={progress} />
+			{:else}
+				<ion-progress-bar color="blue" type="indeterminate" />
+			{/if}
+		{:else}
+			<ion-button size={'large'} on:click={generate}>
+				<ion-label>画像生成</ion-label>
+			</ion-button>
+		{/if}
 	</ion-item>
-	{#if base64Data}
+	{#if filePath}
 		<ion-item>
-			<ion-img
-				src="file:///private/var/mobile/Containers/Data/Application/CA8A6C55-F3DB-4A20-B2F2-D2CC435F7355/Documents/images/aaaa.png"
-			/>
+			<ion-img src={Capacitor.convertFileSrc(filePath)} />
 		</ion-item>
 	{/if}
 </ion-list>
